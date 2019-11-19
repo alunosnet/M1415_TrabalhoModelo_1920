@@ -78,6 +78,7 @@
             this.leitorToolStripMenuItem.Name = "leitorToolStripMenuItem";
             this.leitorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.leitorToolStripMenuItem.Text = "Leitor";
+            this.leitorToolStripMenuItem.Click += new System.EventHandler(this.leitorToolStripMenuItem_Click);
             // 
             // livroToolStripMenuItem
             // 

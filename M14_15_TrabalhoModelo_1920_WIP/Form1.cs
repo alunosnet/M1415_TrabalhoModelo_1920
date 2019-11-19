@@ -18,8 +18,11 @@ namespace M14_15_TrabalhoModelo_1920_WIP
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+       
+
+        private void leitorToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
             f_leitor f = new f_leitor(bd);
             f.Show();
         }
