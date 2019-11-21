@@ -60,6 +60,12 @@
     <Compile Include="f_leitor.Designer.cs">
       <DependentUpon>f_leitor.cs</DependentUpon>
     </Compile>
+    <Compile Include="f_livro.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="f_livro.Designer.cs">
+      <DependentUpon>f_livro.cs</DependentUpon>
+    </Compile>
     <Compile Include="Leitor.cs" />
     <Compile Include="Livro.cs" />
     <Compile Include="Program.cs" />
@@ -70,6 +76,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="f_leitor.resx">
       <DependentUpon>f_leitor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="f_livro.resx">
+      <DependentUpon>f_livro.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -19,11 +19,17 @@ namespace M14_15_TrabalhoModelo_1920_WIP
         }
 
        
-
+        //editar-leitores
         private void leitorToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
             f_leitor f = new f_leitor(bd);
+            f.Show();
+        }
+        //editar-livros
+        private void livroToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            f_livro f = new f_livro(bd);
             f.Show();
         }
     }
