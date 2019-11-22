@@ -32,5 +32,11 @@ namespace M14_15_TrabalhoModelo_1920_WIP
             f_livro f = new f_livro(bd);
             f.Show();
         }
+
+        private void empréstimosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            f_emprestimos f = new f_emprestimos(bd);
+            f.Show();
+        }
     }
 }

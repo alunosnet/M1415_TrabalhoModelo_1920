@@ -17,7 +17,11 @@ namespace M14_15_TrabalhoModelo_1920_WIP
         public decimal preco;
         public string capa;
         public bool estado;
-
+        public Livro(int nlivro,string nome)
+        {
+            this.nlivro = nlivro;
+            this.nome = nome;
+        }
         public Livro(string nome, int ano, DateTime data_aquisicao, decimal preco, string capa)
         {
             this.nome = nome;
@@ -25,6 +29,12 @@ namespace M14_15_TrabalhoModelo_1920_WIP
             this.data_aquisicao = data_aquisicao;
             this.preco = preco;
             this.capa = capa;
+        }
+
+        internal static DataTable ListaLivrosDisponiveis(BaseDados bd)
+        {
+            string sql = "select * from livros where estado=1";
+            return bd.devolveSQL(sql);
         }
 
         public void Adicionar(BaseDados bd)
@@ -161,6 +171,11 @@ namespace M14_15_TrabalhoModelo_1920_WIP
                 this.capa = dados.Rows[0]["capa"].ToString();
                 this.estado = bool.Parse(dados.Rows[0]["estado"].ToString());
             }
+        }
+        
+        public override string ToString()
+        {
+            return this.nome;
         }
     }
 }

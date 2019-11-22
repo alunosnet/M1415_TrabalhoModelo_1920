@@ -16,6 +16,11 @@ namespace M14_15_TrabalhoModelo_1920_WIP
         public byte[] fotografia;
         public bool estado; //1-ativo 0-inativo
 
+        public Leitor(int nleitor,string nome)
+        {
+            this.nleitor = nleitor;
+            this.nome = nome;
+        }
         public Leitor(string nome,DateTime data_nascimento,
             byte[] fotografia)
         {
@@ -62,6 +67,13 @@ namespace M14_15_TrabalhoModelo_1920_WIP
             //executar
             bd.executaSQL(sql, parametros);
         }
+
+        internal static DataTable ListaLeitoresDisponiveis(BaseDados bd)
+        {
+            string sql = "select * from leitores where estado=1";
+            return bd.devolveSQL(sql);
+        }
+
         //remover
         public static void Remover(BaseDados bd,int id)
         {
@@ -141,6 +153,11 @@ namespace M14_15_TrabalhoModelo_1920_WIP
                 this.fotografia = (byte[])dados.Rows[0]["fotografia"];
                 this.estado = bool.Parse(dados.Rows[0]["estado"].ToString());
             }
+        }
+
+        public override string ToString()
+        {
+            return this.nome;
         }
     }
 }
