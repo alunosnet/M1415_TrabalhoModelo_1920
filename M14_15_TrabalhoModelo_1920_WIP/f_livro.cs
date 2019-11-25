@@ -13,10 +13,12 @@ namespace M14_15_TrabalhoModelo_1920_WIP
     public partial class f_livro : Form
     {
         BaseDados bd;
+        int nrlinhas, nrpagina;
         public f_livro(BaseDados bd)
         {
             InitializeComponent();
             this.bd = bd;
+            AtualizarGrelhaLivros();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -89,5 +91,100 @@ namespace M14_15_TrabalhoModelo_1920_WIP
             tbPreco.Clear();
             pbCapa.ImageLocation = "";
         }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            dataGridView1.DataSource = Livro.PesquisaPorNome(bd,textBox1.Text);
+        }
+
+        private void printDocument1_PrintPage(object sender, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+            imprimeGrelha(e, dataGridView1);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //printDocument1.Print();
+            //printDialog1.ShowDialog();
+            printDocument1.DefaultPageSettings.Landscape = true;
+            printPreviewDialog1.ShowDialog();
+        }
+
+        private void imprimeGrelha(System.Drawing.Printing.PrintPageEventArgs e, DataGridView grelha)
+        {
+            Graphics impressora = e.Graphics;
+            Font tipoLetra = new Font("Arial", 10);
+            Font tipoLetraMaior = new Font("Arial", 12, FontStyle.Bold);
+            Brush cor = Brushes.Black;
+            float mesquerda, mdireita, msuperior, minferior, linha, largura;
+            Pen caneta = new Pen(cor, 2);
+
+            //margens
+            mesquerda = printDocument1.DefaultPageSettings.Margins.Left;
+            mdireita = printDocument1.DefaultPageSettings.Bounds.Right - mesquerda;
+            msuperior = printDocument1.DefaultPageSettings.Margins.Top;
+            minferior = printDocument1.DefaultPageSettings.Bounds.Height - msuperior;
+            largura = mdireita - mesquerda;
+            //calcular as colunas da grelha
+            float[] colunas = new float[grelha.Columns.Count];
+            float lgrelha = 0;
+            for (int i = 0; i < grelha.Columns.Count; i++)
+                lgrelha += grelha.Columns[i].Width;
+            colunas[0] = mesquerda;
+            float total = mesquerda, larguraColuna;
+            for (int i = 0; i < grelha.Columns.Count - 1; i++)
+            {
+                larguraColuna = grelha.Columns[i].Width / lgrelha;
+                colunas[i + 1] = larguraColuna * largura + total;
+                total = colunas[i + 1];
+            }
+            //cabeçalhos
+            for (int i = 0; i < grelha.Columns.Count; i++)
+            {
+                impressora.DrawString(grelha.Columns[i].HeaderText, tipoLetraMaior, cor, colunas[i], msuperior);
+            }
+            linha = msuperior + tipoLetraMaior.Height;
+            //ciclo para percorrer a grelha
+            int l;
+            for (l = nrlinhas; l < grelha.Rows.Count; l++)
+            {
+                //desenhar linha
+                impressora.DrawLine(caneta, mesquerda, linha, mdireita, linha);
+                //escrever uma linha
+                for (int c = 0; c < grelha.Columns.Count; c++)
+                {
+                    impressora.DrawString(grelha.Rows[l].Cells[c].Value.ToString(),
+                        tipoLetra, cor, colunas[c], linha);
+                }
+                //avançar para linha seguinte
+                linha = linha + tipoLetra.Height;
+                //verificar se o papel acabou
+                if (linha + tipoLetra.Height > minferior)
+                    break;
+            }
+            //tem mais páginas?
+            if (l < grelha.Rows.Count)
+            {
+                nrlinhas = l + 1;
+                e.HasMorePages = true;
+            }
+            //rodapé
+            impressora.DrawString("12ºH - Página " + nrpagina.ToString(), tipoLetra, cor, mesquerda, minferior);
+            //nr página
+            nrpagina++;
+            //linhas
+            //linha superior
+            impressora.DrawLine(caneta, mesquerda, msuperior, mdireita, msuperior);
+            //linha inferior
+            impressora.DrawLine(caneta, mesquerda, linha, mdireita, linha);
+            //colunas
+            for (int c = 0; c < colunas.Length; c++)
+            {
+                impressora.DrawLine(caneta, colunas[c], msuperior, colunas[c], linha);
+            }
+            //linha lado direito
+            impressora.DrawLine(caneta, mdireita, msuperior, mdireita, linha);
+        }
+
     }
 }

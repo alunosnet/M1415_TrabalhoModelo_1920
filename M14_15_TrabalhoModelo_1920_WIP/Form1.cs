@@ -38,5 +38,17 @@ namespace M14_15_TrabalhoModelo_1920_WIP
             f_emprestimos f = new f_emprestimos(bd);
             f.Show();
         }
+
+        private void devolverToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            f_devolve f = new f_devolve(bd);
+            f.Show();
+        }
+
+        private void consultarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            f_consultas f = new f_consultas(bd);
+            f.Show();
+        }
     }
 }

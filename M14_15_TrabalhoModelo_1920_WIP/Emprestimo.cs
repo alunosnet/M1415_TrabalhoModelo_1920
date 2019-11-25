@@ -57,5 +57,16 @@ namespace M14_15_TrabalhoModelo_1920_WIP
             sql = "UPDATE livros SET estado=0 WHERE nlivro=" + nlivro;
             bd.executaSQL(sql);
         }
+
+        internal static void Devolver(BaseDados bd, int nlivro)
+        {
+            //alterar o estado do emprestimo
+            string sql = @"update emprestimos set estado=0 
+                            where estado=1 and nlivro=" + nlivro;
+            bd.executaSQL(sql);
+            //alterar o estado do livro
+            sql = "update livros set estado=1 where nlivro=" + nlivro;
+            bd.executaSQL(sql);
+        }
     }
 }

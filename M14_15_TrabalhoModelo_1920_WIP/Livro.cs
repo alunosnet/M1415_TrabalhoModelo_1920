@@ -36,7 +36,11 @@ namespace M14_15_TrabalhoModelo_1920_WIP
             string sql = "select * from livros where estado=1";
             return bd.devolveSQL(sql);
         }
-
+        internal static DataTable ListaLivrosEmprestados(BaseDados bd)
+        {
+            string sql = "select * from livros where estado=0";
+            return bd.devolveSQL(sql);
+        }
         public void Adicionar(BaseDados bd)
         {
             //sql com insert
@@ -140,7 +144,7 @@ namespace M14_15_TrabalhoModelo_1920_WIP
             return bd.devolveSQL("Select * from livros");
         }
         //pesquisar
-        public DataTable PesquisaPorNome(BaseDados bd, string nome)
+        public static DataTable PesquisaPorNome(BaseDados bd, string nome)
         {
             string sql = "select * from livros where nome like @nome";
             string filtro = "%" + nome + "%";
