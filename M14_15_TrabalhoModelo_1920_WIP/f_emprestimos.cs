@@ -50,5 +50,24 @@ namespace M14_15_TrabalhoModelo_1920_WIP
                 cbLeitores.Items.Add(leitor);
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (cbLeitores.SelectedItem == null)
+            {
+                MessageBox.Show("Selecione um leitor");
+                return;
+            }
+            //nleitor
+            Leitor leitor = cbLeitores.SelectedItem as Leitor;
+            //nlivro
+            Livro livro = cbLivros.SelectedItem as Livro;
+            //criar um objeto emprestimo
+            Emprestimo emp = new Emprestimo(leitor.nleitor, livro.nlivro, dateTimePicker1.Value);
+            //adicionar a bd
+            emp.Adicionar(bd);
+            //refresh da combo dos livros
+            preencheCBLivros();
+        }
     }
 }

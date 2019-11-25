@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,40 +25,37 @@ namespace M14_15_TrabalhoModelo_1920_WIP
         public void Adicionar(BaseDados bd)
         {
             //sql com insert
-            string sql = $@"insert into Leitores(nome,data_nasc,
-                            fotografia,estado) values 
-                            (@nome,@data_nasc,@fotografia,@estado)";
+            string sql = $@"insert into emprestimos(nlivro,nleitor,
+                            data_emprestimo,data_devolve,estado) values 
+                            (@nlivro,@nleitor,getdate(),
+                                @data_devolve,1)";
             //parametros
             List<SqlParameter> parametros = new List<SqlParameter>()
             {
                 new SqlParameter()
                 {
-                    ParameterName="@nome",
-                    SqlDbType=System.Data.SqlDbType.VarChar,
-                    Value=this.nome
+                    ParameterName="@nlivro",
+                    SqlDbType=System.Data.SqlDbType.Int,
+                    Value=this.nlivro
                 },
                 new SqlParameter()
                 {
-                    ParameterName="@data_nasc",
+                    ParameterName="@nleitor",
+                    SqlDbType=System.Data.SqlDbType.Int,
+                    Value=this.nleitor
+                },
+                new SqlParameter()
+                {
+                    ParameterName="@data_devolve",
                     SqlDbType=System.Data.SqlDbType.Date,
-                    Value=this.data_nascimento
+                    Value=this.data_devolve
                 },
-                new SqlParameter()
-                {
-                    ParameterName="@fotografia",
-                    SqlDbType=System.Data.SqlDbType.VarBinary,
-                    Value=this.fotografia
-                },
-                new SqlParameter()
-                {
-                    ParameterName="@estado",
-                    SqlDbType=System.Data.SqlDbType.Bit,
-                    Value=this.estado
-                },
-
             };
             //executar
             bd.executaSQL(sql, parametros);
+            //alterar o estado do livro emprestado para 0
+            sql = "UPDATE livros SET estado=0 WHERE nlivro=" + nlivro;
+            bd.executaSQL(sql);
         }
     }
 }
