@@ -154,7 +154,24 @@ namespace M14_15_TrabalhoModelo_1920_WIP
                 this.estado = bool.Parse(dados.Rows[0]["estado"].ToString());
             }
         }
-
+        static public int NrDeLeitores(BaseDados bd)
+        {
+            string sql = "Select count(*) as nr from leitores";
+            DataTable dados = bd.devolveSQL(sql);
+            int nr = int.Parse(dados.Rows[0][0].ToString());
+            dados.Dispose();
+            return nr;
+        }
+        public static DataTable listaTodosLeitores(BaseDados bd,
+           int primeiroregisto, int ultimoregisto)
+        {
+            string sql = $@"SELECT nleitor,nome,estado from 
+                    (select row_number() over (order by nleitor) as num,
+                        nleitor,nome,estado from leitores) as p
+                        WHERE num>={primeiroregisto} and
+                        num<={ultimoregisto}";
+            return bd.devolveSQL(sql);
+        }
         public override string ToString()
         {
             return this.nome;

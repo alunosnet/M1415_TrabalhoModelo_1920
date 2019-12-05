@@ -134,6 +134,13 @@ namespace M14_15_TrabalhoModelo_1920_WIP
                     SqlDbType=System.Data.SqlDbType.VarChar,
                     Value=this.capa
                 },
+                new SqlParameter()
+                {
+                    ParameterName="@nlivro",
+                    SqlDbType=System.Data.SqlDbType.Int,
+                    Value=id
+                },
+
             };
             //executar
             bd.executaSQL(sql, parametros);
@@ -163,7 +170,7 @@ namespace M14_15_TrabalhoModelo_1920_WIP
         //pesquisar por nleitor
         public void PesquisaPorNLivro(BaseDados bd, int id)
         {
-            string sql = "select * from livro where nlivro=" + id;
+            string sql = "select * from livros where nlivro=" + id;
             DataTable dados = bd.devolveSQL(sql);
             if (dados != null && dados.Rows.Count > 0)
             {

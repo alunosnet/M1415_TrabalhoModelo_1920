@@ -14,6 +14,7 @@ namespace M14_15_TrabalhoModelo_1920_WIP
     {
         BaseDados bd;
         int nrlinhas, nrpagina;
+        int nlivroEditar;
         public f_livro(BaseDados bd)
         {
             InitializeComponent();
@@ -108,6 +109,81 @@ namespace M14_15_TrabalhoModelo_1920_WIP
             //printDialog1.ShowDialog();
             printDocument1.DefaultPageSettings.Landscape = true;
             printPreviewDialog1.ShowDialog();
+        }
+
+        private void editarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //editar
+            int nlivro = nlivroSelecionado();
+            nlivroEditar = nlivro;
+            Livro livro = new Livro(nlivro, "");
+            livro.PesquisaPorNLivro(bd, nlivro);
+
+            tbNome.Text = livro.nome;
+            tbAno.Text = livro.ano.ToString();
+            tbPreco.Text = livro.preco.ToString();
+            dtpData.Value = livro.data_aquisicao;
+            pbCapa.ImageLocation = livro.capa;
+
+            button4.Visible = true;
+            button5.Visible = true;
+            button2.Visible = false;
+        }
+
+        private void removerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //remover
+            int nlivro = nlivroSelecionado();
+            Livro livro = new Livro(nlivro, "");
+            livro.PesquisaPorNLivro(bd, nlivro);
+            if(MessageBox.Show("Tem a certeza que pretende remover o livro " + livro.nome, "Remover", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                //remover capa
+                if (System.IO.File.Exists(livro.capa))
+                    System.IO.File.Delete(livro.capa);
+                Livro.Remover(bd, nlivro);
+                AtualizarGrelhaLivros();
+            }
+        }
+        int nlivroSelecionado()
+        {
+            int linha = dataGridView1.CurrentCell.RowIndex;
+            if (linha == -1)
+            {
+                return -1;
+            }
+            int nlivro = int.Parse(dataGridView1.Rows[linha].Cells[0].Value.ToString());
+            return nlivro;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            //atualizar
+            Livro livro = new Livro(nlivroEditar,"");
+            livro.nome = tbNome.Text;
+            livro.ano = int.Parse(tbAno.Text);
+            livro.capa = pbCapa.ImageLocation;
+            livro.data_aquisicao = dtpData.Value;
+            livro.preco = decimal.Parse(tbPreco.Text);
+
+            livro.Atualizar(bd, nlivroEditar);
+
+            //cancelar
+            LimparForm();
+
+            button4.Visible = false;
+            button5.Visible = false;
+            button2.Visible = true;
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            //cancelar
+            LimparForm();
+
+            button4.Visible = false;
+            button5.Visible =false;
+            button2.Visible = true;
         }
 
         private void imprimeGrelha(System.Drawing.Printing.PrintPageEventArgs e, DataGridView grelha)

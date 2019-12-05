@@ -12,7 +12,7 @@ namespace M14_15_TrabalhoModelo_1920_WIP
 {
     public class BaseDados
     {
-        private string bdName = "M14_15_trabalhomodelo_1920";
+        private string bdName = "M14_15_bd_1920";
         private string caminho;
         private string strLigacao;
         private SqlConnection ligacaoBD;

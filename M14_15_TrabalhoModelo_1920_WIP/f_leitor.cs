@@ -14,18 +14,41 @@ namespace M14_15_TrabalhoModelo_1920_WIP
     {
         BaseDados bd;
         int nleitorEditar;
+        const int registosPorPagina = 5;
         public f_leitor(BaseDados bd)
         {
             InitializeComponent();
             this.bd = bd;
 
-            AtualizaGrelha(bd);
+            atualizaNrPaginas();
+            AtualizaGrelha();
         }
-
-        private void AtualizaGrelha(BaseDados bd)
+        private void atualizaNrPaginas()
         {
-            //preencher gridview
-            dataGridView1.DataSource = Leitor.ListarTodos(bd);
+            cbPagina.Items.Clear();
+            int nrLeitores = Leitor.NrDeLeitores(bd);
+            int nrPaginas = (int)Math.Ceiling(nrLeitores / (float)registosPorPagina);
+            for (int i = 1; i <= nrPaginas; i++)
+                cbPagina.Items.Add(i);
+            //para evitar erros qd não há leitores
+            if (cbPagina.Items.Count == 0)
+                cbPagina.Items.Add("1");
+            cbPagina.SelectedIndex = 0;
+        }
+        private void AtualizaGrelha()
+        {
+            //consulta à bd
+            if (cbPagina.SelectedIndex == -1)
+                dataGridView1.DataSource = Leitor.ListarTodos(bd);
+            else
+            {
+                int nrpagina = cbPagina.SelectedIndex + 1;
+                int primeiroregisto = (nrpagina - 1) * registosPorPagina + 1;
+                int ultimoregisto = primeiroregisto + registosPorPagina - 1;
+                dataGridView1.DataSource = Leitor.listaTodosLeitores(bd,
+                    primeiroregisto, ultimoregisto);
+
+            }
         }
 
         //pesquisar foto
@@ -59,7 +82,8 @@ namespace M14_15_TrabalhoModelo_1920_WIP
             Leitor leitor = new Leitor(tbNome.Text, dtpData.Value, fotografia);
            
             leitor.Adicionar(bd);
-            AtualizaGrelha(bd);
+            atualizaNrPaginas();
+            AtualizaGrelha();
             LimparForm();
 
         }
@@ -93,7 +117,8 @@ namespace M14_15_TrabalhoModelo_1920_WIP
             if (MessageBox.Show(mensagem, "Confirmar", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 Leitor.Remover(bd,nleitor);
-                AtualizaGrelha(bd);
+                atualizaNrPaginas();
+                AtualizaGrelha();
             }
             
         }
@@ -103,7 +128,7 @@ namespace M14_15_TrabalhoModelo_1920_WIP
             Leitor leitor = new Leitor(tbNome.Text, dtpData.Value, Utils.ImagemParaVetor(pbFoto.ImageLocation));
             //nleitor
             leitor.Atualizar(bd, nleitorEditar);
-            AtualizaGrelha(bd);
+            AtualizaGrelha();
             //esconder
             button3.Visible = false;
             button4.Visible = false;
@@ -124,6 +149,11 @@ namespace M14_15_TrabalhoModelo_1920_WIP
             button3.Visible = false;
             button2.Visible = true;
             LimparForm();
+        }
+
+        private void cbPagina_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AtualizaGrelha();
         }
     }
 }
